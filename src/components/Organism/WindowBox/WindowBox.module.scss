@@ -1,9 +1,7 @@
 .main {
-  color: var(--color-100);
-  width: 100%;
-  max-width: 900px;
-  margin: auto;
-  padding: 20px;
-  box-shadow: 0px 5px 5px #9c9c9a4d;
-  border: 1px solid var(--color-80);
+  @include window-style();
+
+  h2 {
+    margin-bottom: rem(10px);
+  }
 }
