@@ -3,10 +3,19 @@
 
   .content {
     padding: 20px 0;
-  }
 
-  .container {
-    display: flex;
-    gap: 20px;
+    .container {
+      display: flex;
+      gap: 20px;
+    }
+
+    .result {
+      margin-top: 4rem;
+    }
+
+    .result p {
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
   }
 }
