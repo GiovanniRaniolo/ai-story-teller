@@ -1,6 +1,10 @@
 .main {
   h3 {
-    margin-bottom: rem(5px);
+    margin-bottom: rem(15px);
+
+    display: block;
+    font-weight: bold;
+    font-size: 1rem;
   }
 
   select {

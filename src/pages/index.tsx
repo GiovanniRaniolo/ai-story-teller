@@ -99,15 +99,17 @@ export default function Home() {
                 value={antagonista}
                 setValue={setAntagonista}
               />
-              <SelectBox
-                label="Genere:"
-                list={listaGeneri}
-                setAction={setGenere}
-              />
               <SwitchBox
                 label="Personaggi Secondari:"
                 value={personaggiSecondari}
                 setValue={setPersonaggiSecondari}
+              />
+            </div>
+            <div className={style.container}>
+              <SelectBox
+                label="Genere:"
+                list={listaGeneri}
+                setAction={setGenere}
               />
               <SelectBox
                 label="Stile Narrativo:"
@@ -119,6 +121,9 @@ export default function Home() {
                 value={breve}
                 setValue={setBreve}
               />
+            </div>
+
+            <div className={style.container}>
               <Button
                 label="Genera"
                 onClick={handleGenerate}

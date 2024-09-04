@@ -2,6 +2,8 @@
   @include window-style();
 
   h2 {
+    display: flex;
+    justify-content: center;
     margin-bottom: rem(10px);
   }
 }
