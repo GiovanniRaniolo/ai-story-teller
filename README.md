@@ -1,40 +1,66 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# AI Story Teller
 
-## Getting Started
+AI Story Teller is an innovative application that generates creative stories based on user input. It allows users to customize their stories with various genres and narrative styles, and provides options for voice narration of the generated content.
+![screenshot](public/screenshot.png)
 
-First, run the development server:
+## Table of Contents
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- [Introduction](#introduction)
+- [Features](#features)
+- [Demo](#demo)
+- [Technologies Used](#technologies-used)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Introduction
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+AI Story Teller is designed to create engaging and imaginative stories using advanced AI algorithms. Users can specify various parameters such as protagonist, antagonist, genre, and narrative style to generate a story that meets their needs. The app also supports voice narration to enhance the storytelling experience.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+## Features
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+- **Story Generation**: Generate stories based on customizable parameters.
+- **Genre Options**: Choose from a wide range of genres including Horror, Fantasy, Adventure, Romantic, Sci-Fi, Mystery, Children's Fairy Tale etc.
+- **Narrative Styles**: Select from different narrative styles such as First Person, Third Person, Omniscient Narrator, Diary Style, Stream of Consciousness, Epistolary, Cinematic, Fairy Tale, Poetic, and Logbook.
+- **Voice Narration**: Listen to the generated stories with adjustable voice settings.
+- **Responsive Design**: Access the app from any device with a modern web browser.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Demo
 
-## Learn More
+You can try out the AI Story Teller application live by visiting our [demo on Vercel](https://ai-story-teller-beta.vercel.app).
 
-To learn more about Next.js, take a look at the following resources:
+## Technologies Used
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+AI Story Teller is built using a modern stack of technologies:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- **[Next.js](https://nextjs.org/)**: A React framework for building server-side rendered and statically generated web applications.
+- **[React](https://reactjs.org/)**: A JavaScript library for building user interfaces.
+- **[Sass](https://sass-lang.com/)**: A CSS preprocessor that adds power and elegance to CSS with variables, nested rules, and mixins.
+- **[Gemini AI](https://www.gemini.ai/)**: Provides the AI-powered text generation capabilities used for creating stories.
+- **[Speech Synthesis API](https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis)**: Built into modern browsers, this API allows the application to convert text to speech.
+- **[Vercel](https://vercel.com/)**: Deployment platform for hosting the application.
+- **[Webpack](https://webpack.js.org/)**: Module bundler used to compile and bundle the app’s assets.
 
-## Deploy on Vercel
+## Usage
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Open the application in your browser.
+2. Fill in the required fields such as protagonist, antagonist, and genre.
+3. Select the narrative style and any additional options.
+4. Click on the "Generate" button to create a story.
+5. Review the generated story and use the voice narration feature if desired.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Contributing
+
+We welcome contributions to AI Story Teller! If you'd like to contribute, please follow these steps:
+
+1.  Fork the repository.
+2.  Create a new branch for your changes.
+3.  Make your changes and commit them.
+4.  Push your changes to your forked repository.
+5.  Open a pull request to merge your changes into the main repository.
+
+Please ensure your code adheres to our coding standards and includes appropriate tests.
+
+## License
+
+AI Story Teller is licensed under the MIT License. See the LICENSE file for more details
