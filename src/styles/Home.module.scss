@@ -2,18 +2,32 @@
   min-height: 100vh;
 
   .content {
-    padding: 20px 0;
+    padding: 16px 0;
 
     .container {
       display: flex;
       gap: 20px;
       align-items: center;
       justify-content: center;
-      margin-bottom: 25px;
+      flex-wrap: wrap;
+
+      @media (max-width: 768px) {
+        gap: 15px;
+
+        & > * {
+          flex-direction: column;
+        }
+      }
     }
 
     .result {
       margin-top: 2rem;
+    }
+
+    .result h1 {
+      padding-left: 18px;
+      font-size: 2rem;
+      margin-bottom: 1rem;
     }
 
     .result p {

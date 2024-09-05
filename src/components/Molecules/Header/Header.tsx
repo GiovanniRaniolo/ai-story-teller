@@ -11,7 +11,7 @@ const Header = (props: HeaderProps) => {
   return (
     <div className={style.main}>
       <h1>{title}</h1>
-      <Button label="ABOUT" />
+      {/* <Button label="ABOUT" /> */}
     </div>
   );
 };

@@ -13,7 +13,7 @@ const SwitchBox = (props: SwitchBoxProps) => {
 
   return (
     <div className={style.main}>
-      <h3>{label}</h3>
+      <p>{label}</p>
       <Switch active={value} setActive={setValue} />
     </div>
   );

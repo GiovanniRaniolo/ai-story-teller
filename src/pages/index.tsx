@@ -1,5 +1,5 @@
 import Head from "next/head";
-import style from "@/styles/Home.module.css";
+import style from "@/styles/Home.module.scss";
 import Header from "@/components/Molecules/Header/Header";
 import WindowBox from "@/components/Organism/WindowBox/WindowBox";
 import InputBox from "@/components/Molecules/InputBox/InputBox";
@@ -12,12 +12,15 @@ import Loader from "@/components/Atoms/Loader/Loader";
 import Toast from "@/components/Atoms/Toast/Toast";
 
 export default function Home() {
+  const [title, setTitle] = useState("");
   const [protagonista, setProtagonista] = useState("");
   const [antagonista, setAntagonista] = useState("");
+  const [ambientazione, setAmbientazione] = useState("");
   const [genere, setGenere] = useState("");
   const [personaggiSecondari, setPersonaggiSecondari] = useState(false);
   const [stileNarrativo, setStileNarrativo] = useState("");
   const [breve, setBreve] = useState(false);
+  const [puntiDiVistaMultipli, setPuntiDiVistaMultipli] = useState(false);
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState("");
   const [isPlaying, setIsPlaying] = useState(false); // Stato per la sintesi vocale
@@ -57,71 +60,76 @@ export default function Home() {
   };
 
   const handleGenerate = async () => {
-    setLoading(true);
-    const prompt = `genera un racconto ${genere} ${
-      breve ? "molto breve" : "lungo e dettagliato"
-    }, con il protagonista chiamato ${protagonista}, l'antagonista chiamato ${antagonista}${
-      personaggiSecondari ? ", aggiungi uno o più personaggi secondari" : ""
-    }. 
-    Stile narrativo: ${stileNarrativo}.`;
-
-    console.log("Prompt generato:", prompt);
-
+    // Controlla i campi obbligatori
     if (
-      protagonista.trim().length > 0 &&
-      antagonista.trim().length > 0 &&
-      genere.trim().length > 0
+      title.trim().length === 0 ||
+      protagonista.trim().length === 0 ||
+      genere.trim().length === 0
     ) {
-      try {
-        const response = await fetch("/api/generate", {
-          headers: { "Content-Type": "application/json" },
-          method: "POST",
-          body: JSON.stringify({ prompt }),
-        });
-
-        const data = await response.json();
-
-        if (response.ok && data.message) {
-          console.log("Output generated:", data.message);
-          setResponse(data.message);
-
-          showToast(
-            "Successo",
-            "Storia generata con successo!",
-            "#4BB543",
-            "success.svg"
-          );
-        } else {
-          console.error(
-            "Errore nella generazione del contenuto:",
-            data.message
-          );
-          setResponse("Errore nella generazione del contenuto.");
-
-          showToast(
-            "Errore",
-            "Errore nella generazione del contenuto.",
-            "#FF0000",
-            "error.svg"
-          );
-        }
-      } catch (error) {
-        console.error("Errore durante la generazione:", error);
-        setResponse("Si è verificato un errore durante la generazione.");
-
-        showToast(
-          "Errore",
-          "Si è verificato un errore durante la generazione.",
-          "#FF0000",
-          "error.svg"
-        );
-      }
-    } else {
       showToast(
         "Attenzione",
         "Tutti i campi sono obbligatori!",
         "#FFA500",
         "warning.svg"
+      );
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+
+    const prompt = `genera un racconto ${genere} dal titolo "${title}", racconto ${
+      breve ? "molto breve" : "lungo e dettagliato"
+    }, con il protagonista chiamato ${protagonista}${
+      antagonista ? `, l'antagonista chiamato ${antagonista}` : ""
+    }${personaggiSecondari ? ", aggiungi uno o più personaggi secondari" : ""}.
+    Stile narrativo: ${stileNarrativo}.
+    Ambientazione: ${ambientazione}.
+    ${
+      puntiDiVistaMultipli
+        ? "Include diversi punti di vista dei personaggi."
+        : ""
+    }`;
+
+    try {
+      const response = await fetch("/api/generate", {
+        headers: { "Content-Type": "application/json" },
+        method: "POST",
+        body: JSON.stringify({ prompt }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.message) {
+        console.log("Output generated:", data.message);
+        setResponse(data.message);
+
+        showToast(
+          "Successo",
+          "Storia generata con successo!",
+          "#4BB543",
+          "success.svg"
+        );
+      } else {
+        console.error("Errore nella generazione del contenuto:", data.message);
+        setResponse("Errore nella generazione del contenuto.");
+
+        showToast(
+          "Errore",
+          "Errore nella generazione del contenuto.",
+          "#FF0000",
+          "error.svg"
+        );
+      }
+    } catch (error) {
+      console.error("Errore durante la generazione:", error);
+      setResponse("Si è verificato un errore durante la generazione.");
+
+      showToast(
+        "Errore",
+        "Si è verificato un errore durante la generazione.",
+        "#FF0000",
+        "error.svg"
       );
     }
 
@@ -163,22 +171,27 @@ export default function Home() {
           <WindowBox title="Parametri">
             <div className={style.container}>
               <InputBox
+                label="Titolo Racconto:"
+                value={title}
+                setValue={setTitle}
+              />
+              <InputBox
                 label="Nome Protagonista:"
                 value={protagonista}
                 setValue={setProtagonista}
               />
+
               <InputBox
                 label="Nome Antagonista:"
                 value={antagonista}
                 setValue={setAntagonista}
               />
-              <SwitchBox
-                label="Personaggi Secondari:"
-                value={personaggiSecondari}
-                setValue={setPersonaggiSecondari}
+              <InputBox
+                label="Luogo o Ambientazione:"
+                value={ambientazione}
+                setValue={setAmbientazione}
               />
-            </div>
-            <div className={style.container}>
+
               <SelectBox
                 label="Genere:"
                 list={listaGeneri}
@@ -189,10 +202,22 @@ export default function Home() {
                 list={listaStiliNarrativi}
                 setAction={setStileNarrativo}
               />
+            </div>
+            <div className={style.container}>
+              <SwitchBox
+                label="Personaggi Secondari:"
+                value={personaggiSecondari}
+                setValue={setPersonaggiSecondari}
+              />
               <SwitchBox
                 label="Storia Breve:"
                 value={breve}
                 setValue={setBreve}
+              />
+              <SwitchBox
+                label="Punti di Vista Multipli:"
+                value={puntiDiVistaMultipli}
+                setValue={setPuntiDiVistaMultipli}
               />
             </div>
 
@@ -201,8 +226,8 @@ export default function Home() {
                 label="Genera"
                 onClick={handleGenerate}
                 disabled={
+                  title.trim().length <= 0 ||
                   protagonista.trim().length <= 0 ||
-                  antagonista.trim().length <= 0 ||
                   genere.trim().length <= 0 ||
                   loading
                 }
@@ -215,9 +240,17 @@ export default function Home() {
               </div>
             ) : (
               <div className={style.result}>
-                {response.split("\n\n").map((paragraph, index) => (
-                  <p key={index}>{paragraph}</p>
-                ))}
+                {response.split("\n\n").map((paragraph, index) => {
+                  // Verifica se il paragrafo inizia con "##"
+                  if (paragraph.startsWith("##")) {
+                    // Rimuovi i "##" e crea un h1
+                    const title = paragraph.replace(/^##\s*/, ""); // Rimuove i "##" e lo spazio iniziale
+                    return <h1 key={index}>{title}</h1>;
+                  }
+
+                  // Altrimenti restituisci un normale paragrafo
+                  return <p key={index}>{paragraph}</p>;
+                })}
               </div>
             )}
             {/* Pulsante per avviare la sintesi vocale */}

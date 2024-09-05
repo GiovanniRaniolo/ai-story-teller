@@ -18,7 +18,7 @@ const SelectBox = (props: SelectBoxProps) => {
 
   return (
     <div className={style.main}>
-      <h3>{label}</h3>
+      <label>{label}</label>
       <select id="select" onChange={handleChange} defaultValue="">
         <option value="" hidden>
           seleziona
