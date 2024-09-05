@@ -7,11 +7,9 @@ import SelectBox from "@/components/Molecules/SelectBox/SelectBox";
 import { useState } from "react";
 import { listaGeneri, listaStiliNarrativi } from "@/constants/common";
 import Button from "@/components/Atoms/Button/Button";
-import {
-  GenerateContentCandidate,
-  GoogleGenerativeAI,
-} from "@google/generative-ai";
 import SwitchBox from "@/components/Molecules/SwitchBox/SwitchBox";
+import Loader from "@/components/Atoms/Loader/Loader";
+import Toast from "@/components/Atoms/Toast/Toast";
 
 export default function Home() {
   const [protagonista, setProtagonista] = useState("");
@@ -19,58 +17,133 @@ export default function Home() {
   const [genere, setGenere] = useState("");
   const [personaggiSecondari, setPersonaggiSecondari] = useState(false);
   const [stileNarrativo, setStileNarrativo] = useState("");
-  const [breve, setBreve] = useState(false); // Cambiato da "dettagliata" a "breve"
+  const [breve, setBreve] = useState(false);
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState("");
+  const [isPlaying, setIsPlaying] = useState(false); // Stato per la sintesi vocale
+
+  const [toastList, setToastList] = useState<
+    Array<{
+      id: number;
+      title: string;
+      description: string;
+      backgroundColor: string;
+      icon: string;
+    }>
+  >([]);
+
+  const showToast = (
+    title: string,
+    description: string,
+    backgroundColor: string,
+    icon: string
+  ) => {
+    const id = Math.floor(Math.random() * 1000);
+    const newToast = {
+      id,
+      title,
+      description,
+      backgroundColor,
+      icon: `/icons/${icon}`,
+    };
+
+    setToastList((prevToastList) => [...prevToastList, newToast]);
+  };
+
+  const removeToast = (id: number) => {
+    setToastList((prevToastList) =>
+      prevToastList.filter((toast) => toast.id !== id)
+    );
+  };
 
   const handleGenerate = async () => {
     setLoading(true);
     const prompt = `genera un racconto ${genere} ${
-      breve ? "breve" : "dettagliato"
+      breve ? "molto breve" : "lungo e dettagliato"
     }, con il protagonista chiamato ${protagonista}, l'antagonista chiamato ${antagonista}${
       personaggiSecondari ? ", aggiungi uno o più personaggi secondari" : ""
     }. 
     Stile narrativo: ${stileNarrativo}.`;
 
-    console.log("Prompt generato:", prompt); // Debug
+    console.log("Prompt generato:", prompt);
 
-    try {
-      if (!process.env.NEXT_PUBLIC_API_KEY) {
-        console.error("API_KEY non è definita!"); // Debug
-        return;
+    if (
+      protagonista.trim().length > 0 &&
+      antagonista.trim().length > 0 &&
+      genere.trim().length > 0
+    ) {
+      try {
+        const response = await fetch("/api/generate", {
+          headers: { "Content-Type": "application/json" },
+          method: "POST",
+          body: JSON.stringify({ prompt }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.message) {
+          console.log("Output generated:", data.message);
+          setResponse(data.message);
+
+          showToast(
+            "Successo",
+            "Storia generata con successo!",
+            "#4BB543",
+            "success.svg"
+          );
+        } else {
+          console.error(
+            "Errore nella generazione del contenuto:",
+            data.message
+          );
+          setResponse("Errore nella generazione del contenuto.");
+
+          showToast(
+            "Errore",
+            "Errore nella generazione del contenuto.",
+            "#FF0000",
+            "error.svg"
+          );
+        }
+      } catch (error) {
+        console.error("Errore durante la generazione:", error);
+        setResponse("Si è verificato un errore durante la generazione.");
+
+        showToast(
+          "Errore",
+          "Si è verificato un errore durante la generazione.",
+          "#FF0000",
+          "error.svg"
+        );
       }
-
-      if (
-        protagonista.trim().length <= 0 ||
-        antagonista.trim().length <= 0 ||
-        genere.trim().length <= 0
-      ) {
-        setLoading(false);
-        return;
-      }
-
-      const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_API_KEY);
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-      const result = await model.generateContent(prompt);
-      console.log("Response from API:", result); // Debug
-
-      const output = (
-        result.response.candidates as GenerateContentCandidate[]
-      )[0]?.content?.parts[0]?.text;
-
-      if (output) {
-        console.log("Output generated:", output); // Debug
-        setResponse(output);
-      } else {
-        console.error("No output generated.");
-        setResponse("Errore nella generazione del contenuto.");
-      }
-    } catch (error) {
-      console.error("Errore durante la generazione:", error); // Debug
-      setResponse("Si è verificato un errore durante la generazione.");
+    } else {
+      showToast(
+        "Attenzione",
+        "Tutti i campi sono obbligatori!",
+        "#FFA500",
+        "warning.svg"
+      );
     }
 
     setLoading(false);
+  };
+
+  // Funzione per avviare la sintesi vocale
+  const handleVoice = () => {
+    const utterance = new SpeechSynthesisUtterance(response);
+    utterance.lang = "it-IT";
+    setIsPlaying(true);
+    speechSynthesis.speak(utterance);
+
+    utterance.onend = () => {
+      setIsPlaying(false);
+    };
+  };
+
+  // Funzione per fermare la sintesi vocale
+  const handleStopVoice = () => {
+    speechSynthesis.cancel();
+    setIsPlaying(false);
   };
 
   return (
@@ -87,7 +160,7 @@ export default function Home() {
       <main className={style.main}>
         <Header title="AI Story Teller" />
         <div className={style.content}>
-          <WindowBox title="Story Params">
+          <WindowBox title="Parametri">
             <div className={style.container}>
               <InputBox
                 label="Nome Protagonista:"
@@ -117,7 +190,7 @@ export default function Home() {
                 setAction={setStileNarrativo}
               />
               <SwitchBox
-                label="Storia Breve:" // Cambiato da "Storia Dettagliata" a "Storia Breve"
+                label="Storia Breve:"
                 value={breve}
                 setValue={setBreve}
               />
@@ -137,8 +210,8 @@ export default function Home() {
             </div>
 
             {loading ? (
-              <div className={style.loading}>
-                <p>loading...</p>
+              <div className={style.container}>
+                <Loader />
               </div>
             ) : (
               <div className={style.result}>
@@ -147,8 +220,21 @@ export default function Home() {
                 ))}
               </div>
             )}
+            {/* Pulsante per avviare la sintesi vocale */}
+            {!loading && response && (
+              <div className={style.container}>
+                <Button
+                  label={isPlaying ? "Stop" : "Riproduci"}
+                  onClick={isPlaying ? handleStopVoice : handleVoice}
+                  disabled={loading || response.trim().length === 0}
+                />
+              </div>
+            )}
           </WindowBox>
         </div>
+
+        {/* Componente Toast */}
+        <Toast toastList={toastList} removeToast={removeToast} />
       </main>
     </>
   );
