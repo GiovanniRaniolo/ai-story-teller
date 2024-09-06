@@ -6,10 +6,12 @@ import InputBox from "@/components/Molecules/InputBox/InputBox";
 import SelectBox from "@/components/Molecules/SelectBox/SelectBox";
 import { useState } from "react";
 import { listaGeneri, listaStiliNarrativi } from "@/constants/common";
+import { FinaleAlternativo } from "@/types/common";
 import Button from "@/components/Atoms/Button/Button";
 import SwitchBox from "@/components/Molecules/SwitchBox/SwitchBox";
 import Loader from "@/components/Atoms/Loader/Loader";
 import Toast from "@/components/Atoms/Toast/Toast";
+import Slider from "@/components/Molecules/Slider/Slider"; // Importa il componente Slider
 
 export default function Home() {
   const [title, setTitle] = useState("");
@@ -23,6 +25,7 @@ export default function Home() {
   const [puntiDiVistaMultipli, setPuntiDiVistaMultipli] = useState(false);
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState("");
+  const [finali, setFinali] = useState<FinaleAlternativo[]>([]); // Stato per i finali
   const [isPlaying, setIsPlaying] = useState(false); // Stato per la sintesi vocale
 
   const [toastList, setToastList] = useState<
@@ -60,7 +63,6 @@ export default function Home() {
   };
 
   const handleGenerate = async () => {
-    // Controlla i campi obbligatori
     if (
       title.trim().length === 0 ||
       protagonista.trim().length === 0 ||
@@ -89,7 +91,21 @@ export default function Home() {
       puntiDiVistaMultipli
         ? "Include diversi punti di vista dei personaggi."
         : ""
-    }`;
+    }
+        Scrivi una storia con finali alternativi. I finali alternativi devono essere elencati come segue:
+
+**Finali Alternativi**
+
+1. Titolo del Finale 1
+Descrizione del Finale 1.
+
+2. Titolo del Finale 2
+Descrizione del Finale 2.
+
+3. Titolo del Finale 3
+Descrizione del Finale 3.
+
+Ogni finale deve essere preceduto da un numero e da un punto, e la descrizione deve seguire su una nuova linea.`;
 
     try {
       const response = await fetch("/api/generate", {
@@ -100,10 +116,12 @@ export default function Home() {
 
       const data = await response.json();
 
-      if (response.ok && data.message) {
-        console.log("Output generated:", data.message);
-        setResponse(data.message);
+      console.log("API Response:", data);
 
+      if (response.ok && data.story) {
+        console.log("Output generated:", data.story);
+        setResponse(data.story);
+        setFinali(data.finals || []);
         showToast(
           "Successo",
           "Storia generata con successo!",
@@ -113,7 +131,6 @@ export default function Home() {
       } else {
         console.error("Errore nella generazione del contenuto:", data.message);
         setResponse("Errore nella generazione del contenuto.");
-
         showToast(
           "Errore",
           "Errore nella generazione del contenuto.",
@@ -124,7 +141,6 @@ export default function Home() {
     } catch (error) {
       console.error("Errore durante la generazione:", error);
       setResponse("Si è verificato un errore durante la generazione.");
-
       showToast(
         "Errore",
         "Si è verificato un errore durante la generazione.",
@@ -132,11 +148,9 @@ export default function Home() {
         "error.svg"
       );
     }
-
     setLoading(false);
   };
 
-  // Funzione per avviare la sintesi vocale
   const handleVoice = () => {
     const utterance = new SpeechSynthesisUtterance(response);
     utterance.lang = "it-IT";
@@ -148,7 +162,6 @@ export default function Home() {
     };
   };
 
-  // Funzione per fermare la sintesi vocale
   const handleStopVoice = () => {
     speechSynthesis.cancel();
     setIsPlaying(false);
@@ -180,7 +193,6 @@ export default function Home() {
                 value={protagonista}
                 setValue={setProtagonista}
               />
-
               <InputBox
                 label="Nome Antagonista:"
                 value={antagonista}
@@ -191,7 +203,6 @@ export default function Home() {
                 value={ambientazione}
                 setValue={setAmbientazione}
               />
-
               <SelectBox
                 label="Genere:"
                 list={listaGeneri}
@@ -220,7 +231,6 @@ export default function Home() {
                 setValue={setPuntiDiVistaMultipli}
               />
             </div>
-
             <div className={style.container}>
               <Button
                 label="Genera"
@@ -233,7 +243,6 @@ export default function Home() {
                 }
               />
             </div>
-
             {loading ? (
               <div className={style.container}>
                 <Loader />
@@ -241,19 +250,19 @@ export default function Home() {
             ) : (
               <div className={style.result}>
                 {response.split("\n\n").map((paragraph, index) => {
-                  // Verifica se il paragrafo inizia con "##"
                   if (paragraph.startsWith("##")) {
-                    // Rimuovi i "##" e crea un h1
-                    const title = paragraph.replace(/^##\s*/, ""); // Rimuove i "##" e lo spazio iniziale
+                    const title = paragraph.replace(/^##\s*/, "");
                     return <h1 key={index}>{title}</h1>;
                   }
-
-                  // Altrimenti restituisci un normale paragrafo
                   return <p key={index}>{paragraph}</p>;
                 })}
               </div>
             )}
-            {/* Pulsante per avviare la sintesi vocale */}
+            <div className={style.result}>
+              <h1>Finali Alternativi</h1>
+            </div>
+            {/* Aggiungi il componente Slider per visualizzare i finali alternativi */}
+            {!loading && finali.length > 0 && <Slider finals={finali} />}
             {!loading && response && (
               <div className={style.container}>
                 <Button
@@ -263,11 +272,10 @@ export default function Home() {
                 />
               </div>
             )}
+
+            <Toast toastList={toastList} removeToast={removeToast} />
           </WindowBox>
         </div>
-
-        {/* Componente Toast */}
-        <Toast toastList={toastList} removeToast={removeToast} />
       </main>
     </>
   );

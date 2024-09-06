@@ -1,0 +1,101 @@
+.carouselContainer {
+  position: relative;
+  display: flex;
+  height: 400px; /* Puoi regolare l'altezza come necessario */
+  width: 100%;
+  overflow: hidden;
+}
+
+.carouselControls {
+  position: absolute;
+  bottom: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  z-index: 1;
+}
+
+.carouselControls input {
+  display: none;
+}
+
+.carouselControls label {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+  display: block;
+  cursor: pointer;
+}
+
+.carouselControls input:checked + label {
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+main#carousel {
+  width: 100%;
+  height: 100%; /* Usa 100% dell'altezza del contenitore */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.item {
+  position: absolute;
+  width: 80%; /* Regola la larghezza come necessario */
+  height: 70%; /* Regola l'altezza come necessario */
+  background-color: coral;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.5s ease, opacity 0.5s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centra il contenuto orizzontalmente */
+  justify-content: center; /* Centra il contenuto verticalmente */
+  padding: 40px;
+  line-height: 1.6;
+  opacity: 0; /* Inizialmente invisibile */
+  top: 50%; /* Posiziona al centro verticalmente */
+  left: 50%; /* Posiziona al centro orizzontalmente */
+  transform: translate(-50%, -50%) translateX(100%); /* Centra l'elemento e poi spostalo fuori dallo schermo */
+}
+
+/* Mostra solo l'elemento attivo */
+.item.active {
+  opacity: 1;
+  transform: translate(-50%, -50%) translateX(0); /* Riposiziona l'elemento al centro */
+}
+
+.navigation {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  transform: translateY(-50%);
+  padding: 10px;
+  z-index: 2;
+}
+
+.prev,
+.next {
+  background-color: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  width: 40px; /* Imposta la larghezza */
+  height: 40px; /* Imposta l'altezza uguale alla larghezza */
+  border-radius: 50%; /* Assicura che l'elemento sia rotondo */
+  display: flex;
+  align-items: center; /* Centra verticalmente il contenuto */
+  justify-content: center; /* Centra orizzontalmente il contenuto */
+  z-index: 2;
+}
+
+.prev:hover,
+.next:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
