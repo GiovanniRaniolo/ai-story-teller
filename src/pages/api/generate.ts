@@ -7,10 +7,11 @@ type FinaleAlternativo = {
 };
 
 const extractFinals = (story: string): { title: string; content: string }[] => {
-  // Trova la sezione dei finali
+  // Trova la sezione dei finali alternativi
   const finalsSectionMatch = story.match(
-    /\*\*Finali Alternativi\*\*\s*([\s\S]*?)(?=\n\s*\d+\.\s|\s*$)/m
+    /\*\*Finali Alternativi\*\*\s*([\s\S]*)/m
   );
+
   if (!finalsSectionMatch) {
     return [];
   }
@@ -19,13 +20,14 @@ const extractFinals = (story: string): { title: string; content: string }[] => {
 
   // Estrai i finali alternativi
   const finals = finalsSection
-    .split(/\n(?=\d+\.\s)/g) // Usa un'espressione regolare per dividere in base ai numeri e ai punti
+    .split(/(?=\n\d+\.\s)/) // Usa un'espressione regolare per dividere in base ai numeri dei finali
     .filter((part) => part.trim()) // Rimuovi parti vuote
     .map((part) => {
+      // Trova il titolo e il contenuto
       const [titleLine, ...contentLines] = part.trim().split("\n");
       const titleMatch = titleLine.match(/^\d+\.\s*(.*)$/);
       const title = titleMatch ? titleMatch[1].trim() : "Finale";
-      const content = contentLines.join("\n").trim(); // Il resto è il contenuto
+      const content = contentLines.join("\n").trim(); // Unisci le linee di contenuto
 
       return {
         title,
@@ -36,6 +38,7 @@ const extractFinals = (story: string): { title: string; content: string }[] => {
   return finals;
 };
 
+// Utilizzo della funzione nella route
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -67,7 +70,7 @@ export default async function handler(
     }
 
     const finals = extractFinals(output);
-    const storyWithoutFinals = output.split("## Finali Alternativi")[0];
+    const storyWithoutFinals = output.split("**Finali Alternativi**")[0].trim();
 
     res.status(200).json({ story: storyWithoutFinals, finals });
   } catch (error) {
