@@ -258,11 +258,15 @@ Ogni finale deve essere preceduto da un numero e da un punto, e la descrizione d
                 })}
               </div>
             )}
-            <div className={style.result}>
-              <h1>Finali Alternativi</h1>
-            </div>
+
             {/* Aggiungi il componente Slider per visualizzare i finali alternativi */}
-            {!loading && finali.length > 0 && <Slider finals={finali} />}
+            {!loading && finali.length > 0 && (
+              <div className={style.result}>
+                <h1>Finali Alternativi</h1>
+                {/* Inserisci il componente Slider all'interno della stessa div */}
+                <Slider finals={finali} />
+              </div>
+            )}
             {!loading && response && (
               <div className={style.container}>
                 <Button
