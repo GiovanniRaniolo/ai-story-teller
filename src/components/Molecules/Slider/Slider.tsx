@@ -43,10 +43,10 @@ const Slider: React.FC<SliderProps> = ({ finals }) => {
             style={{
               backgroundColor: `hsl(${
                 (index * 360) / finals.length
-              }, 80%, 90%)`,
+              }, 70%, 96%)`,
             }}
           >
-            <h2 className={styles.title}>{finale.title}</h2>
+            <h3 className={styles.title}>{finale.title}</h3>
             <p className={styles.content}>{finale.content}</p>
           </div>
         ))}

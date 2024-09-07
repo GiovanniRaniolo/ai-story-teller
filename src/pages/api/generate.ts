@@ -18,6 +18,11 @@ const extractFinals = (story: string): { title: string; content: string }[] => {
 
   const finalsSection = finalsSectionMatch[1].trim();
 
+  // Funzione per rimuovere asterischi
+  const removeAsterisks = (text: string): string => {
+    return text.replace(/\*+/g, ""); // Rimuove tutte le occorrenze degli asterischi
+  };
+
   // Estrai i finali alternativi
   const finals = finalsSection
     .split(/(?=\n\d+\.\s)/) // Usa un'espressione regolare per dividere in base ai numeri dei finali
@@ -26,7 +31,9 @@ const extractFinals = (story: string): { title: string; content: string }[] => {
       // Trova il titolo e il contenuto
       const [titleLine, ...contentLines] = part.trim().split("\n");
       const titleMatch = titleLine.match(/^\d+\.\s*(.*)$/);
-      const title = titleMatch ? titleMatch[1].trim() : "Finale";
+      const title = titleMatch
+        ? removeAsterisks(titleMatch[1].trim())
+        : "Finale";
       const content = contentLines.join("\n").trim(); // Unisci le linee di contenuto
 
       return {

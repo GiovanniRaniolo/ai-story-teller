@@ -92,7 +92,7 @@ export default function Home() {
         ? "Include diversi punti di vista dei personaggi."
         : ""
     }
-        Scrivi una storia con finali alternativi. I finali alternativi devono essere elencati come segue:
+        Scrivi una storia con 5(numero cinque) brevi finali alternativi. I finali alternativi devono essere elencati come segue:
 
 **Finali Alternativi**
 
@@ -261,24 +261,28 @@ Ogni finale deve essere preceduto da un numero e da un punto, e la descrizione d
 
             {/* Aggiungi il componente Slider per visualizzare i finali alternativi */}
             {!loading && finali.length > 0 && (
-              <div className={style.result}>
-                <h1>Finali Alternativi</h1>
-                {/* Inserisci il componente Slider all'interno della stessa div */}
-                <Slider finals={finali} />
-              </div>
+              <>
+                <div className={style.container}>
+                  <h2>Finali Alternativi</h2>
+                </div>
+                <div className={style.container}>
+                  {/* Inserisci il componente Slider all'interno della stessa div */}
+                  <Slider finals={finali} />
+                </div>
+              </>
             )}
-            {!loading && response && (
-              <div className={style.container}>
-                <Button
-                  label={isPlaying ? "Stop" : "Riproduci"}
-                  onClick={isPlaying ? handleStopVoice : handleVoice}
-                  disabled={loading || response.trim().length === 0}
-                />
-              </div>
-            )}
-
-            <Toast toastList={toastList} removeToast={removeToast} />
           </WindowBox>
+          {!loading && response && (
+            <div className={style.container}>
+              <Button
+                label={isPlaying ? "Stop" : "Riproduci"}
+                onClick={isPlaying ? handleStopVoice : handleVoice}
+                disabled={loading || response.trim().length === 0}
+              />
+            </div>
+          )}
+
+          <Toast toastList={toastList} removeToast={removeToast} />
         </div>
       </main>
     </>
