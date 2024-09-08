@@ -5,9 +5,9 @@
 :root {
   --primary-color: #4162a8;
 
-  --color-0: #ffffff;
-  --color-20: #f5f1e3;
-  --color-80: #dddbcb;
+  --color-0: #f8f8f8;
+  --color-20: #b4d2e7;
+  --color-80: #94c5cc;
   --color-100: #313131;
 }
 
@@ -33,4 +33,30 @@ a {
 
 h1 {
   color: var(--primary-color);
+}
+
+@keyframes backgroundColorTransition {
+  0% {
+    background-color: #f8f8f8;
+  }
+  20% {
+    background-color: #e7f5ff;
+  }
+  40% {
+    background-color: #f2fff3;
+  }
+  60% {
+    background-color: #f3e7ff;
+  }
+  80% {
+    background-color: #ffefe5;
+  }
+  100% {
+    background-color: #f8f8f8;
+  }
+}
+
+.transition-background {
+  animation: backgroundColorTransition 20s ease-in-out infinite;
+  min-height: 100vh;
 }

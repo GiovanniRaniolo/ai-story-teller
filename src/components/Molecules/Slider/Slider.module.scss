@@ -2,7 +2,7 @@
   position: relative;
   display: flex;
   width: 80%;
-  min-height: 240px;
+  min-height: 280px;
 
   h3 {
     color: var(--primary-color);
@@ -40,7 +40,7 @@
   position: absolute;
   width: 90%;
   height: 90%;
-  max-width: 500px; /* Adjust maximum width for better desktop fit */
+  max-width: 560px; /* Adjust maximum width for better desktop fit */
   min-height: 200px; /* Set a minimum height to ensure visibility */
   background-color: coral;
   border-radius: 15px;

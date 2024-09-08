@@ -45,6 +45,7 @@ export default function Home() {
     icon: string
   ) => {
     const id = Math.floor(Math.random() * 1000);
+    console.log("Showing toast with id:", id);
     const newToast = {
       id,
       title,
@@ -57,6 +58,7 @@ export default function Home() {
   };
 
   const removeToast = (id: number) => {
+    console.log("Removing toast with id:", id);
     setToastList((prevToastList) =>
       prevToastList.filter((toast) => toast.id !== id)
     );
@@ -93,19 +95,19 @@ export default function Home() {
         : ""
     }
         Scrivi una storia con 5(numero cinque) brevi finali alternativi. I finali alternativi devono essere elencati come segue:
-
-**Finali Alternativi**
-
-1. Titolo del Finale 1
-Descrizione del Finale 1.
-
-2. Titolo del Finale 2
-Descrizione del Finale 2.
-
-3. Titolo del Finale 3
-Descrizione del Finale 3.
-
-Ogni finale deve essere preceduto da un numero e da un punto, e la descrizione deve seguire su una nuova linea.`;
+  
+  **Finali Alternativi**
+  
+  1. Titolo del Finale 1
+  Descrizione del Finale 1.
+  
+  2. Titolo del Finale 2
+  Descrizione del Finale 2.
+  
+  3. Titolo del Finale 3
+  Descrizione del Finale 3.
+  
+  Ogni finale deve essere preceduto da un numero e da un punto, e la descrizione deve seguire su una nuova linea.`;
 
     try {
       const response = await fetch("/api/generate", {
@@ -184,49 +186,49 @@ Ogni finale deve essere preceduto da un numero e da un punto, e la descrizione d
           <WindowBox title="Parametri">
             <div className={style.container}>
               <InputBox
-                label="Titolo Racconto:"
+                label="Titolo Racconto"
                 value={title}
                 setValue={setTitle}
               />
               <InputBox
-                label="Nome Protagonista:"
+                label="Nome Protagonista"
                 value={protagonista}
                 setValue={setProtagonista}
               />
               <InputBox
-                label="Nome Antagonista:"
+                label="Nome Antagonista"
                 value={antagonista}
                 setValue={setAntagonista}
               />
               <InputBox
-                label="Luogo o Ambientazione:"
+                label="Luogo o Ambientazione"
                 value={ambientazione}
                 setValue={setAmbientazione}
               />
               <SelectBox
-                label="Genere:"
+                label="Genere"
                 list={listaGeneri}
                 setAction={setGenere}
               />
               <SelectBox
-                label="Stile Narrativo:"
+                label="Stile Narrativo"
                 list={listaStiliNarrativi}
                 setAction={setStileNarrativo}
               />
             </div>
-            <div className={style.container}>
+            <div className={`${style.container} ${style.switches}`}>
               <SwitchBox
-                label="Personaggi Secondari:"
+                label="Personaggi Secondari"
                 value={personaggiSecondari}
                 setValue={setPersonaggiSecondari}
               />
               <SwitchBox
-                label="Storia Breve:"
+                label="Storia Breve"
                 value={breve}
                 setValue={setBreve}
               />
               <SwitchBox
-                label="Punti di Vista Multipli:"
+                label="Punti di Vista Multipli"
                 value={puntiDiVistaMultipli}
                 setValue={setPuntiDiVistaMultipli}
               />

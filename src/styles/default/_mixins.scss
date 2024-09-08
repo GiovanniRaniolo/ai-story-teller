@@ -1,5 +1,6 @@
 @mixin window-style($width: 100%) {
   color: var(--color-100);
+  background-color: var(--color-0);
   width: $width;
   max-width: 900px;
   margin: auto;

@@ -1,8 +1,16 @@
 .main {
-  margin-top: 24px;
-  margin-bottom: 46px;
+  margin-top: 26px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   p {
     font-size: 12px;
     margin-bottom: 10px;
+  }
+  @media (max-width: 768px) {
+    margin-top: 12px;
+    margin-bottom: 0px;
   }
 }
