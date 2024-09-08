@@ -2,6 +2,7 @@
 
 AI Story Teller is an innovative application that generates creative stories based on user input. It allows users to customize their stories with various genres and narrative styles, and provides options for voice narration of the generated content.
 ![screenshot](public/screenshot.png)
+![screenshot](public/screenshot-2.png)
 
 ## Table of Contents
 
@@ -15,7 +16,7 @@ AI Story Teller is an innovative application that generates creative stories bas
 
 ## Introduction
 
-AI Story Teller is designed to create engaging and imaginative stories using advanced AI algorithms. Users can specify various parameters such as protagonist, antagonist, genre, and narrative style to generate a story that meets their needs. The app also supports voice narration to enhance the storytelling experience.
+AI Story Teller is designed to create engaging and imaginative stories using advanced AI algorithms. Users can specify various parameters such as protagonist, antagonist, genre, narrative style etc. to generate a story that meets their needs. The app also supports voice narration and alternative endings to enhance the storytelling experience.
 
 ## Features
 
