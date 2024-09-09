@@ -44,7 +44,7 @@ AI Story Teller is built using a modern stack of technologies:
 
 ## Usage
 
-1. Open the application in your browser.
+1. Open the application in your browser
 2. Fill in the required fields such as protagonist, antagonist, and genre.
 3. Select the narrative style and any additional options.
 4. Click on the "Generate" button to create a story.
